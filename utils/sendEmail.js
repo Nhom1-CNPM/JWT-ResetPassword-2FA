@@ -6,6 +6,9 @@ module.exports = async (to, subject, text) => {
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
+    },
+    tls: {
+      rejectUnauthorized: false // Bỏ qua lỗi chứng chỉ tự ký (chỉ dùng dev)
     }
   });
 

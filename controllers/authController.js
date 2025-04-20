@@ -61,7 +61,7 @@ exports.forgotPassword = async (req, res) => {
   user.resetPasswordToken = hash;
   user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   await user.save();
-  const link = `http://localhost:3000/reset-password/${resetToken}`;
+  const link = `http://localhost:3000/api/auth/reset-password/${resetToken}`;
   await sendEmail(email, 'Reset Password', `Click: ${link}`);
   res.json({ message: 'Đã gửi email đặt lại mật khẩu' });
 };
@@ -75,6 +75,9 @@ exports.resetPassword = async (req, res) => {
     resetPasswordExpire: { $gt: Date.now() },
   });
   if (!user) return res.status(400).json({ message: 'Token không hợp lệ hoặc đã hết hạn' });
+  if (!newPassword) {
+    return res.status(400).json({ message: 'Vui lòng nhập mật khẩu mới' });
+  }
   user.password = await bcrypt.hash(newPassword, 10);
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;

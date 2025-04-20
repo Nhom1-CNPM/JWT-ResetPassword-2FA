@@ -1,10 +1,15 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const app = express(); // <--- BẠN ĐÃ QUÊN DÒNG NÀY
+const app = express();
 app.use(express.json());
+
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
+const protectedRoutes = require('./routes/protectedRoutes');
+app.use('/api/protected', protectedRoutes);
 
 const startServer = async () => {
   try {
